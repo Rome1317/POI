@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Birdline</string>
+
+    <string-array name= "array_emails">
+        <item>edgar_donato@hotmail.com</item>
+        <item>edgar_donato@outlook.com</item>
+        <item>edgar_donato@gmail.com</item>
+    </string-array>
 </resources>

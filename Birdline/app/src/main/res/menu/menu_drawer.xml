@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/optMeet"
+        android:icon="@drawable/ic_baseline_video_call_24"
+        android:title="Mettings" />
+    <item
+        android:id="@+id/optCont"
+        android:icon="@drawable/ic_baseline_people_24"
+        android:title="Contacts" />
+    <item
+        android:id="@+id/optChat"
+        android:icon="@drawable/ic_baseline_chat_24"
+        android:title="Chat" />
+    <item
+        android:id="@+id/optAssigments"
+        android:icon="@drawable/ic_baseline_assignment_24"
+        android:title="Assigments" />
+    <item
+        android:id="@+id/optGeneral"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="General" />
+    <item
+        android:id="@+id/optAbout"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="About" />
+    <item
+        android:id="@+id/optLog"
+        android:icon="@drawable/ic_baseline_login_24"
+        android:title="Log out" />
+</menu>
