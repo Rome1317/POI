@@ -22,7 +22,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [List.newInstance] factory method to
  * create an instance of this fragment.
  */
-class frag_d : Fragment() {
+class frag_chat : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,7 +33,7 @@ class frag_d : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var root = inflater.inflate(R.layout.fragmento_d, container, false)
+        var root = inflater.inflate(R.layout.chat, container, false)
 
 
 

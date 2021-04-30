@@ -10,18 +10,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alonsodelcid.multichat.models.Chat
 import com.example.birdline.R
 import com.example.birdline.activities.ChatActivity
+import com.example.birdline.frags.frag_chat
 
 class ChatAdapter(val context: Context, var LISTA:List<Chat>): RecyclerView.Adapter<ChatAdapter.Holder>() {
 
+
     inner class Holder(val view: View):RecyclerView.ViewHolder(view), View.OnClickListener{
-        fun Draw (superHero: Chat){
+
+        lateinit var  email:String
+        lateinit var id:String
+        lateinit var name:String
+
+        fun Draw (superHero: Chat) {
             var txt: TextView = view?.findViewById(R.id.username)
-            /*
-            var men: TextView = view?.findViewById(R.id.txt_mensajeItem)
+            var men: TextView = view?.findViewById(R.id.showMore)
             men.text = superHero.users[0]+", "+superHero.users[1]
             email =superHero.users[1]
             id = superHero.id
-             */
+            name = superHero.name
             txt.text= superHero.name
         }
         init {
@@ -33,8 +39,9 @@ class ChatAdapter(val context: Context, var LISTA:List<Chat>): RecyclerView.Adap
                 R.id.OpenChat -> {
                     val  activityIntent =  Intent(context, ChatActivity::class.java)
                     //Mandar datos
-                    //activityIntent.putExtra("EMAIL",this.email)
-                    //activityIntent.putExtra("ID",this.id)
+                    activityIntent.putExtra("EMAIL",this.email)
+                    activityIntent.putExtra("ID",this.id)
+                    activityIntent.putExtra("CHAT_NAME", this.name)
                     context.startActivity(activityIntent)
                 }
             }

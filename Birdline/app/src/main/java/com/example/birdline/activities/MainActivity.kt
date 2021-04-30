@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                     changeFrag(frag_g(), tag = "FragmentG")
                 }
                 R.id.optGeneral -> { //Abre el fragmento D
-                    changeFrag(frag_d(), tag = "FragmentD")
+                    changeFrag(frag_chat(), tag = "FragmentD")
                 }
                 R.id.optAbout -> { //Abre el fragmento E
                     changeFrag(frag_e(), tag = "FragmentE")

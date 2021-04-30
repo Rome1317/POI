@@ -2,7 +2,7 @@ package  com.example.birdline.models
 
 import java.util.*
 
-data class Message (
+data class Mensajes (
     var message: String = "",
     var from: String = "",
     var dob: Date = Date()
