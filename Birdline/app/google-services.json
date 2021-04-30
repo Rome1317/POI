@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245519831192",
+    "project_id": "birdline-test",
+    "storage_bucket": "birdline-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245519831192:android:eacced0706c6c2fe2400ed",
+        "android_client_info": {
+          "package_name": "com.example.birdline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245519831192-56uavpaan5nlq8lbpqcchnb96e3vdmlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm5x1WnQkyLogutMdcPm4RQI-kCjGARFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245519831192-56uavpaan5nlq8lbpqcchnb96e3vdmlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

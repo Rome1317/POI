@@ -7,7 +7,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@drawable/corners"
+    android:background="@drawable/message1"
     android:orientation="vertical"
     android:padding="10dp"
     app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="@drawable/corners"
+        android:background="@drawable/message1"
         tools:text="Hola como estas? " />
 
     <TextView
@@ -34,4 +34,7 @@
         android:layout_gravity="end"
         android:layout_marginTop="10dp"
         tools:text="22:00 hrs" />
+
+
 </LinearLayout>
+

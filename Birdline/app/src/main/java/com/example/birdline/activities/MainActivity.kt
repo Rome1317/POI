@@ -1,15 +1,19 @@
-package com.example.birdline
+package com.example.birdline.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
+import android.widget.Button
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.birdline.R
 import com.example.birdline.frags.*
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+
+enum class ProviderType{
+    BASIC
+}
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    //lateinit var spemails: Spinner
+    lateinit var logout: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,25 +57,27 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
 
                 R.id.optMeet -> { //Abre el fragmento A
-                    changeFrag(FragmentoA(), tag = "FragmentA")
+                    changeFrag(frag_a(), tag = "FragmentA")
                 }
                 R.id.optCont -> { //Abre el fragmento B
-                    changeFrag(FragmentoB(), tag = "FragmentB")
+                    changeFrag(frag_b(), tag = "FragmentB")
                 }
                 R.id.optChat -> { //Abre el fragmento C
-                    changeFrag(FragmentoC(), tag = "FragmentC")
+                    changeFrag(frag_chat_list(), tag = "FragmentC")
                 }
                 R.id.optAssigments -> { //Abre el fragmento G
-                    changeFrag(FragmentoG(), tag = "FragmentG")
+                    changeFrag(frag_g(), tag = "FragmentG")
                 }
                 R.id.optGeneral -> { //Abre el fragmento D
-                    changeFrag(FragmentoD(), tag = "FragmentD")
+                    changeFrag(frag_d(), tag = "FragmentD")
                 }
                 R.id.optAbout -> { //Abre el fragmento E
-                    changeFrag(FragmentoE(), tag = "FragmentE")
+                    changeFrag(frag_e(), tag = "FragmentE")
                 }
                 R.id.optLog -> { //Abre el fragmento F
-                    changeFrag(FragmentoF(), tag = "FragmentF")
+                    changeFrag(frag_f(), tag = "FragmentF")
+                    FirebaseAuth.getInstance().signOut()
+                    onBackPressed()
                 }
                 else -> {
                     TODO()
@@ -79,5 +88,19 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
+
+        // Setup
+        val bundle: Bundle? = intent.extras
+        val email:String? = bundle?.getString("email")
+        setup(email ?: "")
+    }
+
+    private fun setup(email: String){
+
+        title = "Inicio"
+
+        //emailtc.text = email
+        //ArrayAdapter myAdapter = ((ArrayAdapter) spemails.getAdapter())
+
     }
 }

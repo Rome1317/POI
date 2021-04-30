@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <Button
-        android:id="@+id/btnJoin"
+        android:id="@+id/btnRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:capitalize="characters"
@@ -70,7 +70,7 @@
         app:layout_constraintVertical_bias="0.822" />
 
     <EditText
-        android:id="@+id/ptEmail"
+        android:id="@+id/etEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autoText="false"
@@ -88,7 +88,7 @@
         app:layout_constraintVertical_bias="0.287" />
 
     <EditText
-        android:id="@+id/ptPass"
+        android:id="@+id/etPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:contentDescription="Password"
@@ -117,7 +117,7 @@
         app:srcCompat="@drawable/icons8_back_arrow_96" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
