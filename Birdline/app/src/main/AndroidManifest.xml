@@ -14,7 +14,8 @@
         <activity android:name=".activities.ChatActivity" />
         <activity android:name=".activities.LogInActivity" />
         <activity android:name=".activities.SignUpActivity" />
-        <activity android:name=".activities.FirstActivity">
+        <activity android:name=".activities.FirstActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

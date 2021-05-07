@@ -12,6 +12,10 @@ class FirstActivity : AppCompatActivity() {
     lateinit var btnSignIn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        Thread.sleep(2000)
+        setTheme(R.style.Theme_Birdline)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swipe1)
 

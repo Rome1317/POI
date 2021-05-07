@@ -126,6 +126,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        tools:listitem="@layout/message2" />
+        tools:listitem="@layout/message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

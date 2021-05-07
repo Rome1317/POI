@@ -1,5 +1,6 @@
 package com.example.birdline.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
 
                 R.id.optMeet -> { //Abre el fragmento A
-                    changeFrag(frag_a(), tag = "FragmentA")
+                    //changeFrag(frag_a(), tag = "FragmentA")
                 }
                 R.id.optCont -> { //Abre el fragmento B
                     changeFrag(frag_b(), tag = "FragmentB")
@@ -74,10 +75,14 @@ class MainActivity : AppCompatActivity() {
                 R.id.optAbout -> { //Abre el fragmento E
                     changeFrag(frag_e(), tag = "FragmentE")
                 }
-                R.id.optLog -> { //Abre el fragmento F
-                    changeFrag(frag_f(), tag = "FragmentF")
+                R.id.optLog -> { //Abre FirstActivity
+
                     FirebaseAuth.getInstance().signOut()
-                    onBackPressed()
+
+                    val intent: Intent = Intent(this, FirstActivity::class.java)
+                    finish()
+                    startActivity(intent)
+
                 }
                 else -> {
                     TODO()

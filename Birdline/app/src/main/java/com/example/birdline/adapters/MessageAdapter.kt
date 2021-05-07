@@ -1,7 +1,6 @@
 package com.example.birdline.adapters
 
 import android.content.Context
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,9 +41,6 @@ class MessageAdapter(val context: Context, var LISTA: List<Mensajes>): RecyclerV
 
 
 
-
-
-
         }
 
 
@@ -59,7 +55,7 @@ class MessageAdapter(val context: Context, var LISTA: List<Mensajes>): RecyclerV
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return MessageAdapter.Holder(layoutInflater.inflate(R.layout.message2, parent, false))
+        return MessageAdapter.Holder(layoutInflater.inflate(R.layout.message, parent, false))
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {

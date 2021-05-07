@@ -70,7 +70,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/drawer_header"
-        app:itemIconTint="#1568A8"
+        app:itemIconTint="#252525"
         app:menu="@menu/menu_drawer" />
 
 
