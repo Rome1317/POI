@@ -8,11 +8,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.birdline.R
+import com.example.birdline.models.Mensajes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.poi.camppus.models.ReferenciasFirebase
+import com.poi.camppus.models.Users
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -20,6 +23,7 @@ class SignUpActivity : AppCompatActivity() {
     lateinit var etUser : EditText
     lateinit var etEmail : EditText
     lateinit var etPass : EditText
+    lateinit var btnPhoto : Button
 
     private val auth = Firebase.auth
 
@@ -44,6 +48,7 @@ class SignUpActivity : AppCompatActivity() {
         etUser = findViewById<EditText>(R.id.etUser)
         etEmail = findViewById<EditText>(R.id.etEmail)
         etPass = findViewById<EditText>(R.id.etPassword)
+        btnPhoto = findViewById<Button>(R.id.btn_add_Photo)
 
         btnSignUp.setOnClickListener(){
             if (etEmail.text.isNotEmpty() && etPass.text.isNotEmpty() && etUser.text.isNotEmpty()){
@@ -51,6 +56,15 @@ class SignUpActivity : AppCompatActivity() {
                         etPass.text.toString()).addOnCompleteListener(){
 
                     if(it.isSuccessful){
+                        val usuario = Users(
+                                id = etEmail.text.toString(),
+                                nombre = etUser.text.toString(),
+                                emails = etEmail.text.toString(),
+                                contraseña = etPass.text.toString(),
+                                estado = "Disponible",
+                                image = ""
+                        )
+                        firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(etEmail.text.toString()).set(usuario)
                         showHome(it.result?.user?.email ?: "")
                     }else{
                         it.exception.let{

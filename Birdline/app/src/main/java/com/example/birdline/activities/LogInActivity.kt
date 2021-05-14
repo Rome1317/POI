@@ -8,9 +8,14 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.birdline.R
+import com.example.birdline.models.Mensajes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
+import com.poi.camppus.models.ReferenciasFirebase
+import com.poi.camppus.models.Users
 
 class LogInActivity : AppCompatActivity() {
 
@@ -19,6 +24,7 @@ class LogInActivity : AppCompatActivity() {
     lateinit var etPass : EditText
 
     private val auth = Firebase.auth
+    val firebase  = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +49,7 @@ class LogInActivity : AppCompatActivity() {
                         etPass.text.toString()).addOnCompleteListener(){
 
                     if(it.isSuccessful){
+                        firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(etEmail.text.toString()).update("estado","Disponible")
                         showHome(it.result?.user?.email ?: "")
                     }else{
                         it.exception.let{

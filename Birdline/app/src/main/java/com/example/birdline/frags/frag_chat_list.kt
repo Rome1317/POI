@@ -49,7 +49,7 @@ class frag_chat_list : Fragment() {
 
         val rvChat:RecyclerView =root.findViewById<RecyclerView>(R.id.listChatsRecyclerView)
         rvChat.layoutManager = LinearLayoutManager(this.context2!!)
-        val userRef = firebase.collection(ReferenciasFirebase.USERS.toString()).document(auth.currentUser.email)
+        val userRef = firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(auth.currentUser.email)
         userRef.collection(ReferenciasFirebase.CHATS.toString()).get()
             .addOnSuccessListener { document ->
                 Mymessages= document.toObjects(Chat::class.java)

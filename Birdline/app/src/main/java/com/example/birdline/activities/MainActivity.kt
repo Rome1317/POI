@@ -11,12 +11,16 @@ import com.example.birdline.R
 import com.example.birdline.frags.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.poi.camppus.models.ReferenciasFirebase
 
 enum class ProviderType{
     BASIC
 }
 
 class MainActivity : AppCompatActivity() {
+
+    val firebase  = FirebaseFirestore.getInstance()
 
     fun changeFrag(newFrag: Fragment, tag: String){
 
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        var user = intent.getStringExtra("user")
 
         val myNav = findViewById<NavigationView>(R.id.nav)
         val myDrawer = findViewById<DrawerLayout>(R.id.drawer)
@@ -76,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                     changeFrag(frag_e(), tag = "FragmentE")
                 }
                 R.id.optLog -> { //Abre FirstActivity
-
+                    firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(user).update("estado","Desconectado")
                     FirebaseAuth.getInstance().signOut()
 
                     val intent: Intent = Intent(this, FirstActivity::class.java)

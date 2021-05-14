@@ -7,48 +7,49 @@ import android.widget.EditText
 import android.widget.Toast
 import com.alonsodelcid.multichat.models.Chat
 import com.example.birdline.R
+import com.example.birdline.models.Grupos
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.poi.camppus.models.ReferenciasFirebase
+import kotlinx.android.synthetic.main.contact_group.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddChatActivity : AppCompatActivity() {
+class AddGroupActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     //private val db = FirebaseDatabase.getInstance() //INTANCIA DE LA BASE DE DATOS
     val firebase  = FirebaseFirestore.getInstance()
 
     private  lateinit  var destinatario: EditText
-    private  lateinit var chatname: EditText
+    private  lateinit var txtgroupname: EditText
 
     lateinit var users: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_chat)
+        setContentView(R.layout.activity_add_group)
         auth = FirebaseAuth.getInstance()
 
-        chatname = findViewById(R.id.ChatName)
-        destinatario = findViewById(R.id.txt_SendTo)
+        txtgroupname = findViewById(R.id.GroupName)
+        destinatario = findViewById(R.id.txt_SendToGroup)
 
 
-        var btn_enviar: Button = findViewById(R.id.btn_addchat)
+        var btn_enviar: Button = findViewById(R.id.btn_addGroup)
 
-        var btn_addmember: Button = findViewById(R.id.btn_AddMember)
+        var btn_addmember: Button = findViewById(R.id.btn_AddMemberGroup)
 
         users = arrayListOf<String>(auth.currentUser.email)
 
         btn_enviar.setOnClickListener(){
 
-            val test = chatname.text.toString()
+            val test = txtgroupname.text.toString()
 
             if(test != "") {
                 sendMessage()
                 finish()
             }
             else{
-                Toast.makeText(baseContext, "Enter a chat name", Toast.LENGTH_LONG).show()
+                Toast.makeText(baseContext, "Enter a group name", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -63,7 +64,9 @@ class AddChatActivity : AppCompatActivity() {
 
                 Toast.makeText(baseContext, "Member added successfully", Toast.LENGTH_LONG).show()
 
-                btn_enviar.isEnabled = true
+                if(users.size >= 5) {
+                    btn_enviar.isEnabled = true
+                }
             }
             else{
                 Toast.makeText(baseContext, "Add a member to chat with", Toast.LENGTH_LONG).show()
@@ -73,20 +76,20 @@ class AddChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessage() {
-        var chatId= UUID.randomUUID()
-        val title = chatname.text.toString()
+        var groupId= UUID.randomUUID()
+        val title = txtgroupname.text.toString()
         //val users = listOf(auth.currentUser.email, otherUser)
-        val chat = Chat(
-            id = chatId.toString(),
+        val grupo = Grupos(
+            id = groupId.toString(),
             name = "$title",
             users = users
         )
 
-        firebase.collection(ReferenciasFirebase.CHATS.toString()).document(chatId.toString()).set(chat)
+        firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(groupId.toString()).set(grupo)
 
         for(item in users){
             firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(item).collection(
-                ReferenciasFirebase.CHATS.toString()).document(chatId.toString()).set(chat)
+                ReferenciasFirebase.GRUPOS.toString()).document(groupId.toString()).set(grupo)
         }
 
         /*

@@ -42,12 +42,11 @@
             android:textColor="#252525"
             android:textStyle="bold" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/txtCorreo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/array_emails"
-            android:paddingBottom="8dp" />
+            android:text="romelia@hotmail.com" />
 
     </LinearLayout>
 

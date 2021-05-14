@@ -1,5 +1,5 @@
 package com.poi.camppus.models
 
 enum class ReferenciasFirebase {
-    USERS,CHATS, MESSAGES
+    USUARIOS, CHATS, MENSAJES, GRUPOS, SUBGRUPOS, POST
 }

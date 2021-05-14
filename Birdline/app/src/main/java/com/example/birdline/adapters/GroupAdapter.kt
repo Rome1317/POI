@@ -7,27 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.alonsodelcid.multichat.models.Chat
 import com.example.birdline.R
 import com.example.birdline.activities.ChatActivity
+import com.example.birdline.activities.GroupActivity
+import com.example.birdline.models.Grupos
 
-class ChatAdapter(val context: Context, var LISTA:List<Chat>): RecyclerView.Adapter<ChatAdapter.Holder>() {
+class GroupAdapter(val context: Context, var LISTA:List<Grupos>): RecyclerView.Adapter<GroupAdapter.Holder>() {
 
 
-    inner class Holder(val view: View):RecyclerView.ViewHolder(view), View.OnClickListener{
+    inner class Holder(val view: View): RecyclerView.ViewHolder(view), View.OnClickListener{
 
-        lateinit var  email:String
+        lateinit var  users: List<String>
         lateinit var id:String
         lateinit var name:String
 
-        fun Draw (superHero: Chat) {
-            var txt: TextView = view?.findViewById(R.id.username)
-            var men: TextView = view?.findViewById(R.id.showMore)
-            men.text = superHero.users[0]+", "+superHero.users[1]
-            email =superHero.users[1]
+        fun Draw (superHero: Grupos) {
+            var txt: TextView = view?.findViewById(R.id.groupname)
+            //var men: TextView = view?.findViewById(R.id.showMore)
+            //men.text = superHero.users[0]+", "+superHero.users[1]
+            //email =superHero.users[1]
             id = superHero.id
             name = superHero.name
-            txt.text= superHero.name
+            txt.text = superHero.name
         }
         init {
             view.setOnClickListener(this)
@@ -35,12 +36,12 @@ class ChatAdapter(val context: Context, var LISTA:List<Chat>): RecyclerView.Adap
 
         override fun onClick(v: View?) {
             when(v!!.id){
-                R.id.OpenChat -> {
-                    val  activityIntent =  Intent(context, ChatActivity::class.java)
+                R.id.OpenGroupChat -> {
+                    val  activityIntent =  Intent(context, GroupActivity::class.java)
                     //Mandar datos
-                    activityIntent.putExtra("EMAIL",this.email)
+                    //activityIntent.putExtra("EMAIL",this.email)
                     activityIntent.putExtra("ID",this.id)
-                    activityIntent.putExtra("CHAT_NAME", this.name)
+                    activityIntent.putExtra("GROUP_NAME", this.name)
                     context.startActivity(activityIntent)
                 }
             }
@@ -49,7 +50,7 @@ class ChatAdapter(val context: Context, var LISTA:List<Chat>): RecyclerView.Adap
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return Holder(layoutInflater.inflate(R.layout.contact,parent,false))
+        return Holder(layoutInflater.inflate(R.layout.contact_group,parent,false))
     }
 
     //Cantidad de listas a dibujar
@@ -62,4 +63,3 @@ class ChatAdapter(val context: Context, var LISTA:List<Chat>): RecyclerView.Adap
         holder.Draw(LISTA[position])
     }
 }
-

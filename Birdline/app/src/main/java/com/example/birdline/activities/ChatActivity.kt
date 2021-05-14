@@ -1,17 +1,27 @@
 package com.example.birdline.activities
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
-import android.os.Message
+import android.os.Looper
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alonsodelcid.multichat.models.Chat
 import com.example.birdline.R
 import com.example.birdline.adapters.MessageAdapter
 import com.example.birdline.models.Mensajes
+import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,9 +37,28 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var _Mensaje:EditText
     private lateinit var _id: String
 
+    // Location
+    private var PERMISSION_ID = 52
+
+    // Variables required
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var locationRequest: LocationRequest
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat)
+
+        // Location
+        // Initiate the fused...providerClient
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Add Event to button
+        val getPos = findViewById<Button>(R.id.locationbtn)
+
+        getPos.setOnClickListener {
+            getLastLocation()
+            // Coordinates to get city & country
+        }
 
         auth = FirebaseAuth.getInstance()
 
@@ -55,7 +84,7 @@ class ChatActivity : AppCompatActivity() {
 
         val userRef = firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id)
 
-        userRef.collection(ReferenciasFirebase.MESSAGES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
+        userRef.collection(ReferenciasFirebase.MENSAJES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener { document ->
                     var listChats = document.toObjects(Mensajes::class.java)
@@ -65,10 +94,8 @@ class ChatActivity : AppCompatActivity() {
                     val adapter = MessageAdapter(this, listChats)
                     rv.adapter = adapter
 
-
-
                 }
-        userRef.collection(ReferenciasFirebase.MESSAGES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
+        userRef.collection(ReferenciasFirebase.MENSAJES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
                 .addSnapshotListener(){
                     messages,error ->
                     if (error == null){
@@ -93,7 +120,127 @@ class ChatActivity : AppCompatActivity() {
 
         )
 
-        firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id).collection(ReferenciasFirebase.MESSAGES.toString()).document().set(chat)
+        firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id).collection(ReferenciasFirebase.MENSAJES.toString()).document().set(chat)
         txt_mensaje_main.setText("")
+    }
+
+    // Location
+    // Function that will allow us to get the last location
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation(){
+        // Check permission
+        if(CheckPermission()){
+            // Check the location service is enabled
+            if(IsLocationEnabled()){
+                // Get Location
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener{task ->
+                    var location: Location? = task.result
+                    if(location == null){
+
+                        // if the location is null we will get the new user location
+                        getNewLocation()
+
+                    }else{
+
+                        // location.latitude will return the latitude coordinates
+                        // location.longitude will return the longitude coordinates
+                        _Mensaje.setText("Current Coordinates are :\nLat:" + location.latitude + " ;Long:"+ location.longitude+
+                                "\nCity: " + getCityName(location.latitude,location.longitude) + ", Country: " + getCountryName(location.latitude,location.longitude) )
+                    }
+
+                }
+            }else{
+                Toast.makeText(this,"Please Enable your location service", Toast.LENGTH_SHORT).show()
+            }
+        }else{
+            RequestPermission()
+        }
+    }
+
+    // Location null function
+    @SuppressLint("MissingPermission")
+    private fun getNewLocation(){
+        locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 0
+        locationRequest.fastestInterval = 0
+        locationRequest.numUpdates = 2
+        fusedLocationProviderClient!!.requestLocationUpdates(
+            locationRequest,locationCallback, Looper.myLooper()
+            // locationCallback variable
+        )
+    }
+
+    private val locationCallback = object : LocationCallback(){
+        override fun onLocationResult(p0: LocationResult) {
+            var lastLocation : Location = p0.lastLocation
+            // Set the new Location
+            _Mensaje.setText("Your Current Coordinates are :\nLat:" + lastLocation.latitude + " ;Long:"+ lastLocation.longitude+
+                    "\nCity: " + getCityName(lastLocation.latitude,lastLocation.longitude) + ", Country: " + getCountryName(lastLocation.latitude,lastLocation.longitude))
+
+        }
+    }
+
+    // Function to get city name
+    private fun getCityName(lat:Double,long:Double):String{
+        var CityName = ""
+        var geocoder = Geocoder(this, Locale.getDefault())
+        var Adress: MutableList<Address>? = geocoder.getFromLocation(lat,long,1)
+
+        CityName = Adress?.get(0)?.locality.toString()
+        return CityName
+    }
+
+    // Function to get country name
+    private fun getCountryName(lat:Double,long:Double):String{
+        var CountryName = ""
+        var geocoder = Geocoder(this, Locale.getDefault())
+        var Adress: MutableList<Address>? = geocoder.getFromLocation(lat,long,1)
+
+        CountryName = Adress?.get(0)?.countryName.toString()
+        return CountryName
+    }
+
+    // Function that will check the uses permission
+    private fun CheckPermission():Boolean{
+        if(
+            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ){
+            return true
+        }
+
+        return false
+    }
+
+    // Function that will allow us to get user permission
+    private fun RequestPermission(){
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.ACCESS_COARSE_LOCATION),PERMISSION_ID
+        )
+    }
+
+    // Function that check if the location service of the device is enabled
+    private fun IsLocationEnabled():Boolean{
+
+        var locationManager : LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        // this is a buil in function that check the permission result
+        // only for debugging our code
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode == PERMISSION_ID){
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Log.d("Debug:","You Have the Permission")
+            }
+        }
     }
 }
