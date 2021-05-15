@@ -79,6 +79,7 @@ class MessageAdapter(val context: Context, var LISTA: List<Mensajes>): RecyclerV
         return MessageAdapter.Holder(layoutInflater.inflate(R.layout.message, parent, false))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.render(LISTA[position])
     }
