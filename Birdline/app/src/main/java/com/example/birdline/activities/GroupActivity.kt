@@ -12,6 +12,7 @@ import com.example.birdline.R
 import com.example.birdline.adapters.ContactsAdapter
 import com.example.birdline.adapters.MessageAdapter
 import com.example.birdline.adapters.PostAdapter
+import com.example.birdline.adapters.SubGroupAdapter
 import com.example.birdline.models.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -127,15 +128,15 @@ class GroupActivity : AppCompatActivity() {
         }
 
         if(opcion == "SubGrupo"){
-            userRef.collection(ReferenciasFirebase.MENSAJES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
+            postRef.collection(ReferenciasFirebase.SUBGRUPOS.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
                     .addSnapshotListener(){
                         messages,error ->
                         if (error == null){
-                            messages?.let { var listChats = it.toObjects(Mensajes::class.java)
+                            messages?.let { var listChats = it.toObjects(SubGrupos::class.java)
                                 var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
 
                                 rv.layoutManager   = LinearLayoutManager(this)
-                                val adapter = MessageAdapter(this, listChats)
+                                val adapter = SubGroupAdapter(this, listChats)
                                 rv.adapter = adapter }
                         }
                     }
@@ -175,16 +176,16 @@ class GroupActivity : AppCompatActivity() {
 
     }
     private fun showSubGroups() {
-        val userRef = firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id)
+        val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
 
-        userRef.collection(ReferenciasFirebase.MENSAJES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
+        postRef.collection(ReferenciasFirebase.SUBGRUPOS.toString())
                 .get()
                 .addOnSuccessListener { document ->
-                    var listChats = document.toObjects(Mensajes::class.java)
+                    var listChats = document.toObjects(SubGrupos::class.java)
                     var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
 
                     rv.layoutManager   = LinearLayoutManager(this)
-                    val adapter = MessageAdapter(this, listChats)
+                    val adapter = SubGroupAdapter(this, listChats)
                     rv.adapter = adapter
 
 

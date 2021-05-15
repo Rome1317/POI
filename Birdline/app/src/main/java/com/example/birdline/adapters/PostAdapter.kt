@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class PostAdapter(val context: Context, var LISTA: List<Post>): RecyclerView.Adapter<PostAdapter.Holder>() {
     val firebase  = FirebaseFirestore.getInstance();
+
     class Holder(val view: View):RecyclerView.ViewHolder(view) {
         private lateinit var auth: FirebaseAuth
         fun render(posts: Post) {
