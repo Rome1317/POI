@@ -29,7 +29,7 @@ class frag_e : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var root = inflater.inflate(R.layout.fragmento_e, container, false)
+        var root = inflater.inflate(R.layout.fragment_settings, container, false)
 
 
 

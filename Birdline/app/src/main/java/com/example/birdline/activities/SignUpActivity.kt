@@ -33,11 +33,30 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
+        // Choose File
+        /*
+        val getFile = findViewById<Button>(R.id.btn_add_Photo)
+
+        getFile.setOnClickListener {
+            startFileChooser()
+        }
+        */
+
         // Setup
         setup()
 
 
     }
+
+    /*
+    private fun startFileChooser() {
+        var i = Intent()
+        i.setType("image/*")
+        i.setAction(Intent.ACTION_GET_CONTENT)
+        startActivityForResult(Intent.createChooser(i, "Choose Picture"), 111)
+    }
+    */
+     */
 
     private fun setup(){
         title = "Autenticación"

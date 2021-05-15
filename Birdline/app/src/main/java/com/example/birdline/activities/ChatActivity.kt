@@ -10,10 +10,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +34,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var _Mensaje:EditText
     private lateinit var _id: String
 
+
     // Location
     private var PERMISSION_ID = 52
 
@@ -47,6 +45,9 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat)
+
+
+
 
         // Location
         // Initiate the fused...providerClient
@@ -82,6 +83,16 @@ class ChatActivity : AppCompatActivity() {
             _id = uid
         }
 
+        // Members
+        val SpinnerMembers: Spinner = findViewById(R.id.spinner2)
+
+        val postRef = firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id)
+        postRef.get().addOnSuccessListener {
+            var users = it.get("users") as List<String>
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, users)
+            SpinnerMembers.adapter = adapter
+        }
 
         val btn_send: Button = findViewById(R.id.sendMessageButton)
 

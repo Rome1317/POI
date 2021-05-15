@@ -4,21 +4,18 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdline.R
+import com.example.birdline.adapters.ContactsAdapter
 import com.example.birdline.adapters.MessageAdapter
 import com.example.birdline.adapters.PostAdapter
-import com.example.birdline.models.Mensajes
-import com.example.birdline.models.Post
+import com.example.birdline.models.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.birdline.models.ReferenciasFirebase
 
 class GroupActivity : AppCompatActivity() {
 
@@ -50,6 +47,13 @@ class GroupActivity : AppCompatActivity() {
         val btn_Post: Button = findViewById(R.id.btn_post)
         val btn_subGrupos: Button = findViewById(R.id.btn_subgroups)
 
+        var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
+
+        val SpinnerMembers: Spinner = findViewById(R.id.spinner)
+        val members: TextView = findViewById(R.id.textView4)
+
+        val btn_members: Button = findViewById(R.id.members)
+
         val contenedor: ConstraintLayout = findViewById(R.id.constraintLayout2)
         val btnF_addSubGroup: FloatingActionButton = findViewById(R.id.btnF_add_subgroup)
 
@@ -67,6 +71,9 @@ class GroupActivity : AppCompatActivity() {
             showPosts()
             contenedor.visibility = View.VISIBLE
             btnF_addSubGroup.visibility = View.INVISIBLE
+            SpinnerMembers.visibility = View.GONE
+            members.visibility = View.GONE
+            rv.visibility = View.VISIBLE
 
         }
         btn_subGrupos.setOnClickListener() {
@@ -75,7 +82,27 @@ class GroupActivity : AppCompatActivity() {
             showSubGroups()
             contenedor.visibility = View.GONE
             btnF_addSubGroup.visibility = View.VISIBLE
+            SpinnerMembers.visibility = View.GONE
+            members.visibility = View.GONE
+            rv.visibility = View.VISIBLE
 
+        }
+        btn_members.setOnClickListener() {
+
+            val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
+            postRef.get().addOnSuccessListener {
+                var users = it.get("users") as List<String>
+
+                val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, users)
+                SpinnerMembers.adapter = adapter
+            }
+
+            opcion = "Members"
+            rv.visibility = View.GONE
+            SpinnerMembers.visibility = View.VISIBLE
+            members.visibility = View.VISIBLE
+            contenedor.visibility = View.GONE
+            btnF_addSubGroup.visibility = View.INVISIBLE
         }
 
         val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id) //Estoy en duda si es POST xd
@@ -98,7 +125,8 @@ class GroupActivity : AppCompatActivity() {
                         }
                     }
         }
-        else if(opcion == "SubGrupo"){
+
+        if(opcion == "SubGrupo"){
             userRef.collection(ReferenciasFirebase.MENSAJES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
                     .addSnapshotListener(){
                         messages,error ->
@@ -112,6 +140,7 @@ class GroupActivity : AppCompatActivity() {
                         }
                     }
         }
+
 
     }
 
@@ -143,18 +172,7 @@ class GroupActivity : AppCompatActivity() {
                     rv.adapter = adapter
 
                 }
-        //postRef.collection(ReferenciasFirebase.POST.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
-        //        .addSnapshotListener(){
-        //            messages,error ->
-        //            if (error == null){
-        //                messages?.let { var listPost = it.toObjects(Post::class.java)
-        //                    var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
-//
-        //                    rv.layoutManager   = LinearLayoutManager(this)
-        //                    val adapter = PostAdapter(this, listPost)
-        //                    rv.adapter = adapter }
-        //            }
-        //        }
+
     }
     private fun showSubGroups() {
         val userRef = firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id)
@@ -172,19 +190,10 @@ class GroupActivity : AppCompatActivity() {
 
 
                 }
-        //userRef.collection(ReferenciasFirebase.MENSAJES.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
-        //        .addSnapshotListener(){
-        //            messages,error ->
-        //            if (error == null){
-        //                messages?.let { var listChats = it.toObjects(Mensajes::class.java)
-        //                    var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
-//
-        //                    rv.layoutManager   = LinearLayoutManager(this)
-        //                    val adapter = MessageAdapter(this, listChats)
-        //                    rv.adapter = adapter }
-        //            }
-        //        }
+
     }
+
+
 
     private fun showActivity(){
         val intent: Intent = Intent(this, AddSubGroupActivity::class.java)
