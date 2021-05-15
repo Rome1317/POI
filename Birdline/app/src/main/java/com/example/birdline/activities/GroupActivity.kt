@@ -188,6 +188,7 @@ class GroupActivity : AppCompatActivity() {
 
     private fun showActivity(){
         val intent: Intent = Intent(this, AddSubGroupActivity::class.java)
+        intent.putExtra("group_id", _id)
         startActivity(intent)
         //finish()
     }
