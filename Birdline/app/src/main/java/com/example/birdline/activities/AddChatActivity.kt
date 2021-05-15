@@ -10,6 +10,7 @@ import com.example.birdline.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.birdline.models.ReferenciasFirebase
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -34,7 +35,7 @@ class AddChatActivity : AppCompatActivity() {
 
         var btn_enviar: Button = findViewById(R.id.btn_addchat)
 
-        var btn_addmember: Button = findViewById(R.id.btn_AddMember)
+        var btn_addmember: FloatingActionButton = findViewById(R.id.btn_AddMember)
 
         users = arrayListOf<String>(auth.currentUser.email)
 
