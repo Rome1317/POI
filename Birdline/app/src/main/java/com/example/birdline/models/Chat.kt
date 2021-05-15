@@ -1,4 +1,4 @@
-package com.alonsodelcid.multichat.models
+package com.example.birdline.models
 
 data class Chat(
     var id: String = "",

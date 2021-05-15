@@ -2,12 +2,9 @@ package com.example.birdline.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import com.example.birdline.R
-import com.example.birdline.models.Grupos
-import com.poi.camppus.models.ReferenciasFirebase
 
 class AddSubGroupActivity : AppCompatActivity() {
 
@@ -21,8 +18,9 @@ class AddSubGroupActivity : AppCompatActivity() {
         //val txtSubGroupName: TextView = findViewById(R.id.SubGroupName)
 
         //val nameSubGroup
-        val userRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
+        //val userRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
 
+        /*
         userRef.get().addOnSuccessListener{
             var users = it.get("users")
             grupo = Grupos.Subgrupos(
@@ -30,5 +28,7 @@ class AddSubGroupActivity : AppCompatActivity() {
                     name = nombreEquipo,
                     users = users as List<String>
             )
+
+         */
     }
 }

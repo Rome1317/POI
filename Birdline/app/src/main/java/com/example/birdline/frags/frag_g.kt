@@ -5,11 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.alonsodelcid.multichat.models.Chat
 import com.example.birdline.R
-import com.example.birdline.adapters.ChatAdapter
 import kotlin.collections.List
 
 // TODO: Rename parameter arguments, choose names that match

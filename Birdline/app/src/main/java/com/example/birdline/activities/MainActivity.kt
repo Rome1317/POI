@@ -12,7 +12,7 @@ import com.example.birdline.frags.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poi.camppus.models.ReferenciasFirebase
+import com.example.birdline.models.ReferenciasFirebase
 
 enum class ProviderType{
     BASIC
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     //changeFrag(frag_a(), tag = "FragmentA")
                 }
                 R.id.optCont -> { //Abre el fragmento B
-                    changeFrag(frag_b(), tag = "FragmentB")
+                    changeFrag(frag_contact_list(), tag = "FragmentB")
                 }
                 R.id.optChat -> { //Abre el fragmento C
                     changeFrag(frag_chat_list(), tag = "FragmentC")

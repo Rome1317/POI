@@ -8,14 +8,11 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.birdline.R
-import com.example.birdline.models.Mensajes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
-import com.poi.camppus.models.ReferenciasFirebase
-import com.poi.camppus.models.Users
+import com.example.birdline.models.ReferenciasFirebase
 
 class LogInActivity : AppCompatActivity() {
 

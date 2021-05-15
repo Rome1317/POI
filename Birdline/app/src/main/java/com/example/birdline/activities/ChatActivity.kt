@@ -25,7 +25,7 @@ import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poi.camppus.models.ReferenciasFirebase
+import com.example.birdline.models.ReferenciasFirebase
 import java.util.*
 
 class ChatActivity : AppCompatActivity() {
@@ -58,6 +58,13 @@ class ChatActivity : AppCompatActivity() {
         getPos.setOnClickListener {
             getLastLocation()
             // Coordinates to get city & country
+        }
+
+        // Choose File
+        val getFile = findViewById<Button>(R.id.filebtn)
+
+        getFile.setOnClickListener {
+            startFileChooser()
         }
 
         auth = FirebaseAuth.getInstance()
@@ -242,5 +249,11 @@ class ChatActivity : AppCompatActivity() {
                 Log.d("Debug:","You Have the Permission")
             }
         }
+    }
+
+
+    // Files
+    private fun startFileChooser(){
+
     }
 }

@@ -9,13 +9,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alonsodelcid.multichat.models.Chat
+import com.example.birdline.models.Chat
 import com.example.birdline.activities.AddChatActivity
 import com.example.birdline.R
 import com.example.birdline.adapters.ChatAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poi.camppus.models.ReferenciasFirebase
+import com.example.birdline.models.ReferenciasFirebase
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

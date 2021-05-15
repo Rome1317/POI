@@ -18,7 +18,7 @@ import com.example.birdline.models.Post
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poi.camppus.models.ReferenciasFirebase
+import com.example.birdline.models.ReferenciasFirebase
 
 class GroupActivity : AppCompatActivity() {
 

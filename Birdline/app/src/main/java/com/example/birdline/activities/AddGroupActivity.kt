@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.alonsodelcid.multichat.models.Chat
 import com.example.birdline.R
 import com.example.birdline.models.Grupos
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poi.camppus.models.ReferenciasFirebase
-import kotlinx.android.synthetic.main.contact_group.*
+import com.example.birdline.models.ReferenciasFirebase
 import java.util.*
 import kotlin.collections.ArrayList
 

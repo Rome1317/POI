@@ -4,22 +4,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.alonsodelcid.multichat.models.Chat
 import com.example.birdline.R
-import com.example.birdline.adapters.ChatAdapter
 import com.example.birdline.adapters.GroupAdapter
-import com.example.birdline.frags.frag_b
 import com.example.birdline.models.Grupos
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.poi.camppus.models.ReferenciasFirebase
-import kotlinx.android.synthetic.main.activity_add_group.*
+import com.example.birdline.models.ReferenciasFirebase
 
 class GroupListActicity : AppCompatActivity() {
     lateinit var btnContacto: Button
