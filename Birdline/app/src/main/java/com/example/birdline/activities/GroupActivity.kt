@@ -269,9 +269,16 @@ class GroupActivity : AppCompatActivity() {
         //finish()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onResume() {
+        super.onResume()
 
-        showPosts()
+        if(opcion == "SubGrupo"){
+            showSubGroups()
+        }
+
+        if(opcion == "Tasks"){
+            showTasks()
+        }
     }
+
 }

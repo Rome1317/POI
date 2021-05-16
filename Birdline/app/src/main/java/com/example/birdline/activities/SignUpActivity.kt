@@ -1,6 +1,7 @@
 package com.example.birdline.activities
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -15,6 +16,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.example.birdline.models.ReferenciasFirebase
 import com.example.birdline.models.Users
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -22,25 +25,29 @@ class SignUpActivity : AppCompatActivity() {
     lateinit var etUser : EditText
     lateinit var etEmail : EditText
     lateinit var etPass : EditText
-    lateinit var btnPhoto : Button
+
+    var photoAdded: Boolean = false
+
 
     private val auth = Firebase.auth
 
     private val db = FirebaseDatabase.getInstance() //INTANCIA DE LA BASE DE DATOS
     val firebase  = FirebaseFirestore.getInstance()
 
+    private val fileResult = 1
+    var urlImagen = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
         // Choose File
-        /*
         val getFile = findViewById<Button>(R.id.btn_add_Photo)
 
         getFile.setOnClickListener {
-            startFileChooser()
+            FileManager()
         }
-        */
+
 
         // Setup
         setup()
@@ -48,15 +55,17 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    /*
-    private fun startFileChooser() {
-        var i = Intent()
-        i.setType("image/*")
-        i.setAction(Intent.ACTION_GET_CONTENT)
-        startActivityForResult(Intent.createChooser(i, "Choose Picture"), 111)
+
+    private fun FileManager() {
+        //ABRE LA VENTA DEL FILENAMAGER PARA SELECCIONAR LA IMAGEN
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2 ){
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+        }
+        intent.type = "*/*"
+        startActivityForResult(intent,fileResult)
     }
-    */
-     */
+
 
     private fun setup(){
         title = "Autenticación"
@@ -66,35 +75,42 @@ class SignUpActivity : AppCompatActivity() {
         etUser = findViewById<EditText>(R.id.etUser)
         etEmail = findViewById<EditText>(R.id.etEmail)
         etPass = findViewById<EditText>(R.id.etPassword)
-        btnPhoto = findViewById<Button>(R.id.btn_add_Photo)
+       // btnPhoto = findViewById<Button>(R.id.btn_add_Photo)
 
         btnSignUp.setOnClickListener(){
-            if (etEmail.text.isNotEmpty() && etPass.text.isNotEmpty() && etUser.text.isNotEmpty()){
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(etEmail.text.toString(),
-                        etPass.text.toString()).addOnCompleteListener(){
 
-                    if(it.isSuccessful){
-                        val usuario = Users(
+            if(photoAdded != false) {
+                if (etEmail.text.isNotEmpty() && etPass.text.isNotEmpty() && etUser.text.isNotEmpty()) {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+                        etEmail.text.toString(),
+                        etPass.text.toString()
+                    ).addOnCompleteListener() {
+
+                        if (it.isSuccessful) {
+                            val usuario = Users(
                                 id = etEmail.text.toString(),
                                 nombre = etUser.text.toString(),
                                 emails = etEmail.text.toString(),
                                 contraseña = etPass.text.toString(),
                                 estado = "Disponible",
-                                image = ""
-                        )
-                        firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(etEmail.text.toString()).set(usuario)
-                        showHome(it.result?.user?.email ?: "")
-                    }else{
-                        it.exception.let{
-                            Toast.makeText(baseContext, it?.message, Toast.LENGTH_LONG).show()
+                                image = urlImagen
+                            )
+                            firebase.collection(ReferenciasFirebase.USUARIOS.toString())
+                                .document(etEmail.text.toString()).set(usuario)
+                            showHome(it.result?.user?.email ?: "")
+                        } else {
+                            it.exception.let {
+                                Toast.makeText(baseContext, it?.message, Toast.LENGTH_LONG).show()
+                            }
+                            //showAlert()
                         }
-                        //showAlert()
                     }
+                } else {
+                    Toast.makeText(baseContext, "Ingrese todo los campos", Toast.LENGTH_LONG).show()
+                    //showAlert()
                 }
-            }
-            else{
-                Toast.makeText(baseContext, "Ingrese todo los campos", Toast.LENGTH_LONG).show()
-                //showAlert()
+            }else{
+                Toast.makeText(baseContext, "Add photo to your profile", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -118,5 +134,46 @@ class SignUpActivity : AppCompatActivity() {
         intent.putExtra("user", currentUser.email)
         startActivity(intent)
         finish()
+    }
+
+    //trae el elemento seleccionado del file manager
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == fileResult) {
+            if (resultCode == RESULT_OK && data != null) {
+
+                val clipData = data.clipData
+
+                if (clipData != null){
+                    for (i in 0 until clipData.itemCount) {
+                        val uri = clipData.getItemAt(i).uri
+                        uri?.let { fileUpload(it) }
+                    }
+                }else {
+                    val uri = data.data
+                    uri?.let { fileUpload(it) }
+                }
+
+            }
+        }
+    }
+
+    private fun fileUpload(mUri: Uri) {
+        val folder: StorageReference = FirebaseStorage.getInstance().reference.child("Users")
+        val path =mUri.lastPathSegment.toString()
+        val fileName: StorageReference = folder.child(path.substring(path.lastIndexOf('/')+1))
+
+        fileName.putFile(mUri).addOnSuccessListener {
+            fileName.downloadUrl.addOnSuccessListener { uri ->
+                urlImagen =java.lang.String.valueOf(uri)
+                firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(auth.currentUser.email).update("image",urlImagen)
+
+                // Turn Boolean true
+                photoAdded = true
+                Toast.makeText(baseContext, "Photo added succesfully", Toast.LENGTH_LONG).show()
+
+            }
+        }.addOnFailureListener {
+        }
     }
 }
