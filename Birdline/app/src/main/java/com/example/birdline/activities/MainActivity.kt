@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                     changeFrag(frag_chat(), tag = "FragmentD")
                 }
                 R.id.optAbout -> { //Abre el fragmento E
-                    changeFrag(frag_e(), tag = "FragmentE")
+                    changeFrag(frag_settings(), tag = "FragmentE")
                 }
                 R.id.optLog -> { //Abre FirstActivity
                     firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(user).update("estado","Desconectado")

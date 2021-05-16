@@ -5,6 +5,7 @@ import java.util.*
 class Post (
         var publicacion: String = "",
         var from: String = "",
-        var dob: Date = Date()
+        var dob: Date = Date(),
+        var encrypted: Boolean = false
 ){
 }

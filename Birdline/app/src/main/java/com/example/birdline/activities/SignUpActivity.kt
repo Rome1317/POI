@@ -79,7 +79,7 @@ class SignUpActivity : AppCompatActivity() {
 
         btnSignUp.setOnClickListener(){
 
-            if(photoAdded != false) {
+            //if(photoAdded != false) {
                 if (etEmail.text.isNotEmpty() && etPass.text.isNotEmpty() && etUser.text.isNotEmpty()) {
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                         etEmail.text.toString(),
@@ -109,9 +109,12 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.makeText(baseContext, "Ingrese todo los campos", Toast.LENGTH_LONG).show()
                     //showAlert()
                 }
+            /*
             }else{
                 Toast.makeText(baseContext, "Add photo to your profile", Toast.LENGTH_LONG).show()
             }
+
+             */
 
         }
 
@@ -174,6 +177,7 @@ class SignUpActivity : AppCompatActivity() {
 
             }
         }.addOnFailureListener {
+            Toast.makeText(baseContext, "Something went wrong", Toast.LENGTH_LONG).show()
         }
     }
 }

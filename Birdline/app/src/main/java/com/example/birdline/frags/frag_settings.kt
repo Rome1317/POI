@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Switch
 import com.example.birdline.R
 import kotlin.collections.List
 
@@ -18,7 +19,10 @@ private const val ARG_PARAM2 = "param2"
  * Use the [List.newInstance] factory method to
  * create an instance of this fragment.
  */
-class frag_e : Fragment() {
+class frag_settings : Fragment() {
+
+    private var ENCRYPT = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,7 +35,11 @@ class frag_e : Fragment() {
         // Inflate the layout for this fragment
         var root = inflater.inflate(R.layout.fragment_settings, container, false)
 
-
+        val toggle: Switch = root.findViewById(R.id.switch3)
+        toggle.setOnCheckedChangeListener { _, isChecked ->
+            ENCRYPT = isChecked
+            println(ENCRYPT)
+        }
 
         return root
     }

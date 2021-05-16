@@ -43,6 +43,5 @@ class FirstActivity : AppCompatActivity() {
     fun showLogin(){
         val intent: Intent = Intent(this, LogInActivity::class.java)
         startActivity(intent)
-        finish()
     }
 }

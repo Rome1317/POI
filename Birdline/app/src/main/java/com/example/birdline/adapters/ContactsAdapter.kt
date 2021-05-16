@@ -33,7 +33,13 @@ class ContactsAdapter(val context: Context, var LISTA:List<Users>): RecyclerView
             if (superHero != null) {
                 email.text = superHero.emails
                 status.text = superHero.estado
-                Picasso.get().load(superHero.image).into(img)
+
+                if(superHero.image != "") {
+                    Picasso.get().load(superHero.image).into(img)
+                }else{
+                    superHero.image = "https://firebasestorage.googleapis.com/v0/b/birdline-test.appspot.com/o/user.png?alt=media&token=4535d940-b57c-45e1-9da7-bc898e1581c1"
+                    Picasso.get().load(superHero.image).into(img)
+                }
 
             }
         }
