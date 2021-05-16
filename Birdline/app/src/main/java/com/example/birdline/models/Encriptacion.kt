@@ -7,10 +7,10 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-class Encriptacion {
+object Encriptacion {
     private val CIPHER_TRANSFORM ="AES/CBC/PKCS5PADDING"
 
-    fun cifar(textoPlano:String,llave:String): String {
+    fun cifrar(textoPlano:String, llave:String): String {
         val cipher:Cipher = Cipher.getInstance(CIPHER_TRANSFORM)
         val llaveByteFinal = ByteArray(16)
         val llaveByteOriginal = llave.toByteArray(charset("UTF-8"))

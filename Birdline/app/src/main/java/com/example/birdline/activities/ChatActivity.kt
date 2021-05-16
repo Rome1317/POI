@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdline.R
 import com.example.birdline.adapters.MessageAdapter
+import com.example.birdline.models.Encriptacion
+import com.example.birdline.models.EncryptionKeys
 import com.example.birdline.models.Mensajes
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +36,8 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var _Mensaje:EditText
     private lateinit var _id: String
 
+    //Encryption
+    private var ENCRYPT = false
 
     // Location
     private var PERMISSION_ID = 52
@@ -46,8 +50,11 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat)
 
-
-
+        // Set Encryption
+        val toggle:Switch = findViewById(R.id.switch1)
+        toggle.setOnCheckedChangeListener { _, isChecked ->
+            ENCRYPT = isChecked
+        }
 
         // Location
         // Initiate the fused...providerClient
@@ -77,7 +84,6 @@ class ChatActivity : AppCompatActivity() {
         var username: TextView = findViewById(R.id.textView9)
         username.text = chatname
 
-
         _Mensaje = findViewById(R.id.messageTextField)
         if (uid != null) {
             _id = uid
@@ -97,7 +103,18 @@ class ChatActivity : AppCompatActivity() {
         val btn_send: Button = findViewById(R.id.sendMessageButton)
 
         btn_send.setOnClickListener() {
-            sendMessage()
+
+            if(_Mensaje.text.toString() != "") {
+
+                if (!ENCRYPT) {
+                    sendMessage()
+                } else {
+                    sendEncryptMessage()
+                }
+
+            }else{
+                Toast.makeText(this,"Write something", Toast.LENGTH_SHORT).show()
+            }
         }
 
         val userRef = firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id)
@@ -135,6 +152,23 @@ class ChatActivity : AppCompatActivity() {
         val chat = Mensajes(
             message = mensaje,
             from = auth.currentUser.email
+
+        )
+
+        firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id).collection(ReferenciasFirebase.MENSAJES.toString()).document().set(chat)
+        txt_mensaje_main.setText("")
+    }
+
+    private fun sendEncryptMessage() {
+        val mensaje = _Mensaje.text.toString()
+        val txt_mensaje_main:EditText = findViewById(R.id.messageTextField)
+
+        var encryted = Encriptacion.cifrar(mensaje,EncryptionKeys.MENSAJES.toString())
+
+        val chat = Mensajes(
+                message = encryted,
+                from = auth.currentUser.email,
+                encrypted = true
 
         )
 

@@ -10,6 +10,8 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdline.R
+import com.example.birdline.models.Encriptacion
+import com.example.birdline.models.EncryptionKeys
 import com.example.birdline.models.Mensajes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,9 +33,16 @@ class MessageAdapter(val context: Context, var LISTA: List<Mensajes>): RecyclerV
             val mio:TextView = view.findViewById(R.id.myMessageTextView)
             val other:TextView = view.findViewById(R.id.othersMessageTextView)
 
+            // Formato de fecha y hora
             val localDateTime = mensajes.dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yy - HH:mm:ss")
             val formatted = localDateTime.format(formatter)
+
+            // Encriptacion
+            if(mensajes.encrypted != false) {
+                var decrypted = Encriptacion.descifar(mensajes.message,EncryptionKeys.MENSAJES.toString())
+                mensajes.message = decrypted
+            }
 
             if(mensajes.from.equals(auth.currentUser.email)){
                 val user: TextView = view.findViewById(R.id.tvNombre)

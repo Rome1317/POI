@@ -26,6 +26,7 @@ class frag_settings : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
     }
 
     override fun onCreateView(
@@ -35,11 +36,17 @@ class frag_settings : Fragment() {
         // Inflate the layout for this fragment
         var root = inflater.inflate(R.layout.fragment_settings, container, false)
 
+
         val toggle: Switch = root.findViewById(R.id.switch3)
         toggle.setOnCheckedChangeListener { _, isChecked ->
             ENCRYPT = isChecked
             println(ENCRYPT)
+
         }
+
+
+
+
 
         return root
     }

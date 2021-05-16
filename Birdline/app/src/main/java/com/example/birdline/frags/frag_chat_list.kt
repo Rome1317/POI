@@ -48,6 +48,7 @@ class frag_chat_list : Fragment() {
         var root = inflater.inflate(R.layout.fragment_chat_list, container, false)
         auth = FirebaseAuth.getInstance()
 
+
         val rvChat:RecyclerView =root.findViewById<RecyclerView>(R.id.listChatsRecyclerView)
         rvChat.layoutManager = LinearLayoutManager(this.context2!!)
         val userRef = firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(auth.currentUser.email)
@@ -65,6 +66,7 @@ class frag_chat_list : Fragment() {
                 messages?.let {Mymessages= it.toObjects(Chat::class.java)
                     this.adapter = ChatAdapter(this.context2!!, Mymessages)
                     rvChat.adapter = this.adapter }
+
             }
         }
 
