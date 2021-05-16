@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageButton
 import com.example.birdline.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -19,6 +21,8 @@ class LogInActivity : AppCompatActivity() {
     lateinit var btnLogin: Button
     lateinit var etEmail : EditText
     lateinit var etPass : EditText
+
+    lateinit var btnback: ImageButton
 
     private val auth = Firebase.auth
     val firebase  = FirebaseFirestore.getInstance()
@@ -38,6 +42,7 @@ class LogInActivity : AppCompatActivity() {
         btnLogin = findViewById<Button>(R.id.btnRegister)
         etEmail = findViewById<EditText>(R.id.etEmail)
         etPass = findViewById<EditText>(R.id.etPassword)
+        btnback = findViewById<ImageButton>(R.id.btnback)
 
         btnLogin.setOnClickListener(){
             if (etEmail.text.isNotEmpty() && etPass.text.isNotEmpty()){
@@ -58,6 +63,14 @@ class LogInActivity : AppCompatActivity() {
             }
 
         }
+
+        btnback.setOnClickListener(){
+
+            showFirst()
+
+        }
+
+
     }
 
     private fun showAlert(){
@@ -73,6 +86,12 @@ class LogInActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
         val intent: Intent = Intent(this, MainActivity::class.java)
         intent.putExtra("user", currentUser.email)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun showFirst(){
+        val intent: Intent = Intent(this, FirstActivity::class.java)
         startActivity(intent)
         finish()
     }

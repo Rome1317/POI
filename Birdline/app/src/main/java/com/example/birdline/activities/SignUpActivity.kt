@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageButton
 import com.example.birdline.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -25,6 +27,8 @@ class SignUpActivity : AppCompatActivity() {
     lateinit var etUser : EditText
     lateinit var etEmail : EditText
     lateinit var etPass : EditText
+
+    lateinit var btnback: ImageButton
 
     var photoAdded: Boolean = false
 
@@ -75,51 +79,58 @@ class SignUpActivity : AppCompatActivity() {
         etUser = findViewById<EditText>(R.id.etUser)
         etEmail = findViewById<EditText>(R.id.etEmail)
         etPass = findViewById<EditText>(R.id.etPassword)
-       // btnPhoto = findViewById<Button>(R.id.btn_add_Photo)
+
+        btnback = findViewById<ImageButton>(R.id.btnback2)
 
         btnSignUp.setOnClickListener(){
 
-            //if(photoAdded != false) {
-                if (etEmail.text.isNotEmpty() && etPass.text.isNotEmpty() && etUser.text.isNotEmpty()) {
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+            if (etEmail.text.isNotEmpty() && etPass.text.isNotEmpty() && etUser.text.isNotEmpty()) {
+
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                         etEmail.text.toString(),
                         etPass.text.toString()
-                    ).addOnCompleteListener() {
+                ).addOnCompleteListener() {
 
-                        if (it.isSuccessful) {
-                            val usuario = Users(
+                    if (it.isSuccessful) {
+                        val usuario = Users(
                                 id = etEmail.text.toString(),
                                 nombre = etUser.text.toString(),
                                 emails = etEmail.text.toString(),
                                 contraseña = etPass.text.toString(),
                                 estado = "Disponible",
                                 image = urlImagen
-                            )
-                            firebase.collection(ReferenciasFirebase.USUARIOS.toString())
+                        )
+                        firebase.collection(ReferenciasFirebase.USUARIOS.toString())
                                 .document(etEmail.text.toString()).set(usuario)
-                            showHome(it.result?.user?.email ?: "")
-                        } else {
-                            it.exception.let {
-                                Toast.makeText(baseContext, it?.message, Toast.LENGTH_LONG).show()
-                            }
-                            //showAlert()
+                        showHome(it.result?.user?.email ?: "")
+                    } else {
+                        it.exception.let {
+                            Toast.makeText(baseContext, it?.message, Toast.LENGTH_LONG).show()
                         }
+                        //showAlert()
                     }
-                } else {
-                    Toast.makeText(baseContext, "Ingrese todo los campos", Toast.LENGTH_LONG).show()
-                    //showAlert()
                 }
-            /*
-            }else{
-                Toast.makeText(baseContext, "Add photo to your profile", Toast.LENGTH_LONG).show()
-            }
 
-             */
+            } else {
+                Toast.makeText(baseContext, "Ingrese todo los campos", Toast.LENGTH_LONG).show()
+                //showAlert()
+            }
 
         }
 
 
+        btnback.setOnClickListener(){
 
+            showFirst()
+
+        }
+
+    }
+
+    private fun showFirst(){
+        val intent: Intent = Intent(this, FirstActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun showAlert(){

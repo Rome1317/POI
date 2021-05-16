@@ -56,6 +56,19 @@ class SubGroupActivity : AppCompatActivity() {
         var uid = intent.getStringExtra("id")
         var SubGroupName = intent.getStringExtra("SubGroup")
 
+        val SpinnerMembers: Spinner = findViewById(R.id.spinner3)
+
+        val userRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(group_id.toString())
+        userRef.collection(ReferenciasFirebase.SUBGRUPOS.toString()).document(uid.toString()).get().
+            addOnSuccessListener {
+                var users = it.get("users") as List<String>
+
+                val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, users)
+                SpinnerMembers.adapter = adapter
+        }
+
+
+
         var subgroup: TextView = findViewById(R.id.subgroupname)
         subgroup.text = SubGroupName
 

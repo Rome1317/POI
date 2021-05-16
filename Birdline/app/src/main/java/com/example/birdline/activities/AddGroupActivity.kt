@@ -2,9 +2,7 @@ package com.example.birdline.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import com.example.birdline.R
 import com.example.birdline.models.Grupos
 import com.google.firebase.auth.FirebaseAuth
@@ -24,14 +22,27 @@ class AddGroupActivity : AppCompatActivity() {
 
     lateinit var users: ArrayList<String>
 
+    var members: MutableList<String> = arrayListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_group)
         auth = FirebaseAuth.getInstance()
 
         txtgroupname = findViewById(R.id.GroupName)
-        destinatario = findViewById(R.id.txt_SendToGroup)
 
+        var usersSpinner: Spinner = findViewById(R.id.spinner6)
+
+        val postRef = firebase.collection(ReferenciasFirebase.USUARIOS.toString())
+        postRef.get().addOnSuccessListener {result ->
+
+            for (document in result) {
+                members.add(document.data.getValue("id").toString())
+            }
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, members)
+            usersSpinner.adapter = adapter
+        }
 
         var btn_enviar: Button = findViewById(R.id.btn_addGroup)
 
@@ -55,20 +66,18 @@ class AddGroupActivity : AppCompatActivity() {
 
         btn_addmember.setOnClickListener(){
 
-            val email = destinatario.text.toString()
+            val email = usersSpinner.getSelectedItem().toString()
 
-            if(email != "") {
+            if(email in users) {
+                Toast.makeText(this, "Member already added", Toast.LENGTH_SHORT).show()
+            }else{
                 users.add(email)
-                destinatario.setText("")
-
-                Toast.makeText(baseContext, "Member added successfully", Toast.LENGTH_LONG).show()
+                usersSpinner.setSelection(0)
+                Toast.makeText(this, "Member added successfully", Toast.LENGTH_SHORT).show()
 
                 if(users.size >= 5) {
                     btn_enviar.isEnabled = true
                 }
-            }
-            else{
-                Toast.makeText(baseContext, "Add a member to chat with", Toast.LENGTH_LONG).show()
             }
         }
 

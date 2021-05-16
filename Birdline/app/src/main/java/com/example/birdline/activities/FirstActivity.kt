@@ -13,7 +13,7 @@ class FirstActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        Thread.sleep(2000)
+        Thread.sleep(1000)
         setTheme(R.style.Theme_Birdline)
 
         super.onCreate(savedInstanceState)
@@ -43,5 +43,6 @@ class FirstActivity : AppCompatActivity() {
     fun showLogin(){
         val intent: Intent = Intent(this, LogInActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

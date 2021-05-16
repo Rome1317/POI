@@ -149,6 +149,7 @@ class GroupActivity : AppCompatActivity() {
 
         btn_members.setOnClickListener() {
 
+
             val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
             postRef.get().addOnSuccessListener {
                 var users = it.get("users") as List<String>
@@ -162,7 +163,8 @@ class GroupActivity : AppCompatActivity() {
             SpinnerMembers.visibility = View.VISIBLE
             members.visibility = View.VISIBLE
             contenedor.visibility = View.GONE
-            btnF_addSubGroup.visibility = View.INVISIBLE
+            btnF_addSubGroup.visibility = View.GONE
+            btnF_addTask.visibility = View.GONE
         }
 
         val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id) //Estoy en duda si es POST xd

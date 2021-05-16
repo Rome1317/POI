@@ -29,7 +29,6 @@ class SubGroupAdapter(val context: Context, var LISTA: List<SubGrupos>): Recycle
         lateinit var id:String
         lateinit var group_id:String
 
-
         fun render(subgroup: SubGrupos) {
             auth = FirebaseAuth.getInstance()
 
@@ -56,9 +55,9 @@ class SubGroupAdapter(val context: Context, var LISTA: List<SubGrupos>): Recycle
 
                     userRef.collection(ReferenciasFirebase.SUBGRUPOS.toString()).document(this.id.toString()).get()
                             .addOnSuccessListener {
-                                var users = it.get("users")
+                                var members = it.get("users")  as ArrayList<String>
 
-                                if(auth.currentUser.email in users as List<String>){
+                                if(auth.currentUser.email in members){
                                     val  activityIntent =  Intent(context, SubGroupActivity::class.java)
                                     //Mandar datos
                                     activityIntent.putExtra("group_id",this.group_id)
