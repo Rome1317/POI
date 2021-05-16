@@ -49,25 +49,6 @@ class AddSubGroupActivity : AppCompatActivity() {
             SpinnerMember.adapter = adapter
         }
 
-        addMember.setOnClickListener(){
-            val email = SpinnerMember.getSelectedItem().toString()
-
-            if(email != null){
-                if(email in userstoadd){
-                    Toast.makeText(this, "Member already added", Toast.LENGTH_SHORT).show()
-
-                }else{
-                    userstoadd.add(email)
-                    SpinnerMember.setSelection(0)
-                    Toast.makeText(this, "Member added successfully", Toast.LENGTH_SHORT).show()
-                }
-            }
-            else {
-                Toast.makeText(baseContext, "Select a Member to add", Toast.LENGTH_LONG).show()
-            }
-
-
-        }
 
         addMember.setOnClickListener(){
             val email = SpinnerMember.getSelectedItem().toString()
@@ -101,6 +82,7 @@ class AddSubGroupActivity : AppCompatActivity() {
             if(Subgroup_name != "") {
                 createSubgroup()
                 finish()
+
             }
             else{
                 Toast.makeText(baseContext, "Enter Subgroup name", Toast.LENGTH_LONG).show()

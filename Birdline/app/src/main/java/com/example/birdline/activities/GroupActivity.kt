@@ -9,10 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdline.R
-import com.example.birdline.adapters.ContactsAdapter
-import com.example.birdline.adapters.MessageAdapter
-import com.example.birdline.adapters.PostAdapter
-import com.example.birdline.adapters.SubGroupAdapter
+import com.example.birdline.adapters.*
 import com.example.birdline.models.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +23,9 @@ class GroupActivity : AppCompatActivity() {
     private var opcion: String = "Post"
     private lateinit var _post: EditText
     private lateinit var _id: String
+
+    lateinit var sub_groups: List<SubGrupos>
+    private var adapter: SubGroupAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +47,7 @@ class GroupActivity : AppCompatActivity() {
         val btn_send: Button = findViewById(R.id.sendPostButton)
         val btn_Post: Button = findViewById(R.id.btn_post)
         val btn_subGrupos: Button = findViewById(R.id.btn_subgroups)
+        val btn_tasks: Button = findViewById(R.id.button2)
 
         var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
 
@@ -57,6 +58,7 @@ class GroupActivity : AppCompatActivity() {
 
         val contenedor: ConstraintLayout = findViewById(R.id.constraintLayout2)
         val btnF_addSubGroup: FloatingActionButton = findViewById(R.id.btnF_add_subgroup)
+        val btnF_addTask: FloatingActionButton = findViewById(R.id.btnF_add_task)
 
         btn_send.setOnClickListener() {
             sendPost()
@@ -66,12 +68,18 @@ class GroupActivity : AppCompatActivity() {
             showActivity()
         }
 
+        btnF_addTask.setOnClickListener() { //Boton de agregar tarea
+            showAddTask()
+        }
+
+
         btn_Post.setOnClickListener() {
 
             opcion = "Post"
             showPosts()
             contenedor.visibility = View.VISIBLE
-            btnF_addSubGroup.visibility = View.INVISIBLE
+            btnF_addSubGroup.visibility = View.GONE
+            btnF_addTask.visibility = View.GONE
             SpinnerMembers.visibility = View.GONE
             members.visibility = View.GONE
             rv.visibility = View.VISIBLE
@@ -83,11 +91,25 @@ class GroupActivity : AppCompatActivity() {
             showSubGroups()
             contenedor.visibility = View.GONE
             btnF_addSubGroup.visibility = View.VISIBLE
+            btnF_addTask.visibility = View.GONE
             SpinnerMembers.visibility = View.GONE
             members.visibility = View.GONE
             rv.visibility = View.VISIBLE
 
         }
+        btn_tasks.setOnClickListener {
+            opcion = "Tasks"
+            showTasks()
+            contenedor.visibility = View.GONE
+            btnF_addSubGroup.visibility = View.GONE
+            btnF_addTask.visibility = View.VISIBLE
+            SpinnerMembers.visibility = View.GONE
+            members.visibility = View.GONE
+            rv.visibility = View.VISIBLE
+        }
+
+
+
         btn_members.setOnClickListener() {
 
             val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
@@ -113,6 +135,7 @@ class GroupActivity : AppCompatActivity() {
         //_listUsers = (ArrayList<String>)postRef.get("users")
 
         if(opcion == "Post"){
+
             postRef.collection(ReferenciasFirebase.POST.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
                     .addSnapshotListener(){
                         messages,error ->
@@ -128,6 +151,7 @@ class GroupActivity : AppCompatActivity() {
         }
 
         if(opcion == "SubGrupo"){
+
             postRef.collection(ReferenciasFirebase.SUBGRUPOS.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
                     .addSnapshotListener(){
                         messages,error ->
@@ -140,6 +164,23 @@ class GroupActivity : AppCompatActivity() {
                                 rv.adapter = adapter }
                         }
                     }
+        }
+
+        if(opcion == "Tasks"){
+
+            postRef.collection(ReferenciasFirebase.TASKS.toString()).orderBy("dob",com.google.firebase.firestore.Query.Direction.ASCENDING)
+                .addSnapshotListener(){
+                        messages,error ->
+                    if (error == null){
+                        messages?.let { var listChats = it.toObjects(Assigments::class.java)
+                            var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
+
+                            rv.layoutManager   = LinearLayoutManager(this)
+                            val adapter = AssignmentAdapter(this, listChats)
+                            rv.adapter = adapter }
+                    }
+                }
+
         }
 
 
@@ -175,6 +216,7 @@ class GroupActivity : AppCompatActivity() {
                 }
 
     }
+
     private fun showSubGroups() {
         val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
 
@@ -194,6 +236,23 @@ class GroupActivity : AppCompatActivity() {
 
     }
 
+    private fun showTasks() {
+
+        val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id)
+
+        postRef.collection(ReferenciasFirebase.TASKS.toString())
+            .get()
+            .addOnSuccessListener { document ->
+                var listChats = document.toObjects(Assigments::class.java)
+                var rv = findViewById<RecyclerView>(R.id.postRecyclerView)
+
+                rv.layoutManager   = LinearLayoutManager(this)
+                val adapter = AssignmentAdapter(this, listChats)
+                rv.adapter = adapter
+
+            }
+    }
+
 
 
     private fun showActivity(){
@@ -201,5 +260,18 @@ class GroupActivity : AppCompatActivity() {
         intent.putExtra("group_id", _id)
         startActivity(intent)
         //finish()
+    }
+
+    private fun showAddTask(){
+        val intent: Intent = Intent(this, AddAssignmentActivity::class.java)
+        intent.putExtra("group_id", _id)
+        startActivity(intent)
+        //finish()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        showPosts()
     }
 }
