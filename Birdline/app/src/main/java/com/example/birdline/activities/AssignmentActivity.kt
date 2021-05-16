@@ -138,7 +138,7 @@ class AssignmentActivity : AppCompatActivity() {
     }
 
     private fun fileUpload(mUri: Uri) {
-        val folder: StorageReference = FirebaseStorage.getInstance().reference.child("Posts")
+        val folder: StorageReference = FirebaseStorage.getInstance().reference.child("Tasks")
         val path =mUri.lastPathSegment.toString()
         val fileName: StorageReference = folder.child(path.substring(path.lastIndexOf('/')+1))
 
