@@ -37,7 +37,7 @@ class ContactsAdapter(val context: Context, var LISTA:List<Users>): RecyclerView
                 if(superHero.image != "") {
                     Picasso.get().load(superHero.image).into(img)
                 }else{
-                    superHero.image = "https://firebasestorage.googleapis.com/v0/b/birdline-test.appspot.com/o/user.png?alt=media&token=4535d940-b57c-45e1-9da7-bc898e1581c1"
+                    superHero.image = "https://firebasestorage.googleapis.com/v0/b/birdline-test.appspot.com/o/user.png?alt=media&token=3a58d58a-739e-45ee-9526-921dc24b1f29"
                     Picasso.get().load(superHero.image).into(img)
                 }
 

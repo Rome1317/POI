@@ -10,6 +10,8 @@ class Assigments (
         var score:String = "0",
         var status:String = "Pending",
         var users: List<String> = emptyList(),
-        var grupo_id: String = ""
+        var grupo_id: String = "",
+        var comments: String = "",
+        var file: String = ""
 ){
 }

@@ -1,6 +1,7 @@
 package com.example.birdline.activities
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,8 @@ import com.example.birdline.models.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class GroupActivity : AppCompatActivity() {
 
@@ -27,12 +30,24 @@ class GroupActivity : AppCompatActivity() {
     lateinit var sub_groups: List<SubGrupos>
     private var adapter: SubGroupAdapter? = null
 
+    //Photo & Files
+    private val fileResult = 1
+    var urlImagen = ""
+
     //Encryption
     private var ENCRYPT = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.group)
+
+        // Choose File
+        val getFile = findViewById<Button>(R.id.filebtn4)
+
+        getFile.setOnClickListener {
+            FileManager()
+        }
+
 
         // Set Encryption
         val toggle:Switch = findViewById(R.id.switch2)
@@ -235,6 +250,59 @@ class GroupActivity : AppCompatActivity() {
 
         firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id).collection(ReferenciasFirebase.POST.toString()).document().set(post)
         txt_post_main.setText("")
+    }
+
+    //Photos & Files
+    private fun FileManager() {
+        //ABRE LA VENTA DEL FILENAMAGER PARA SELECCIONAR LA IMAGEN
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2 ){
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+        }
+        intent.type = "*/*"
+        startActivityForResult(intent,fileResult)
+    }
+
+    //trae el elemento seleccionado del file manager
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == fileResult) {
+            if (resultCode == RESULT_OK && data != null) {
+
+                val clipData = data.clipData
+
+                if (clipData != null){
+                    for (i in 0 until clipData.itemCount) {
+                        val uri = clipData.getItemAt(i).uri
+                        uri?.let { fileUpload(it) }
+                    }
+                }else {
+                    val uri = data.data
+                    uri?.let { fileUpload(it) }
+                }
+
+            }
+        }
+    }
+
+    private fun fileUpload(mUri: Uri) {
+        val folder: StorageReference = FirebaseStorage.getInstance().reference.child("Posts")
+        val path =mUri.lastPathSegment.toString()
+        val fileName: StorageReference = folder.child(path.substring(path.lastIndexOf('/')+1))
+
+        fileName.putFile(mUri).addOnSuccessListener {
+            fileName.downloadUrl.addOnSuccessListener { uri ->
+                urlImagen =java.lang.String.valueOf(uri)
+
+                _post.setText(urlImagen)
+
+                // Turn Boolean true
+                Toast.makeText(baseContext, "File added succesfully", Toast.LENGTH_LONG).show()
+
+            }
+        }.addOnFailureListener {
+            Toast.makeText(baseContext, "Something went wrong", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun showPosts() {

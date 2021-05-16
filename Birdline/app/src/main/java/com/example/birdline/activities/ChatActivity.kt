@@ -2,11 +2,13 @@ package com.example.birdline.activities
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -25,6 +27,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.birdline.models.ReferenciasFirebase
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import java.util.*
 
@@ -36,6 +41,10 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var _Mensaje:EditText
     private lateinit var _id: String
+
+    //Photo & Files
+    private val fileResult = 1
+    var urlImagen = ""
 
     //Encryption
     private var ENCRYPT = false
@@ -50,6 +59,14 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chat)
+
+
+        // Choose File
+        val getFile = findViewById<Button>(R.id.filebtn)
+
+        getFile.setOnClickListener {
+            FileManager()
+        }
 
         // Set Encryption
         val toggle:Switch = findViewById(R.id.switch1)
@@ -67,13 +84,6 @@ class ChatActivity : AppCompatActivity() {
         getPos.setOnClickListener {
             getLastLocation()
             // Coordinates to get city & country
-        }
-
-        // Choose File
-        val getFile = findViewById<Button>(R.id.filebtn)
-
-        getFile.setOnClickListener {
-            startFileChooser()
         }
 
         auth = FirebaseAuth.getInstance()
@@ -180,6 +190,59 @@ class ChatActivity : AppCompatActivity() {
 
         firebase.collection(ReferenciasFirebase.CHATS.toString()).document(_id).collection(ReferenciasFirebase.MENSAJES.toString()).document().set(chat)
         txt_mensaje_main.setText("")
+    }
+
+    //Photos & Files
+    private fun FileManager() {
+        //ABRE LA VENTA DEL FILENAMAGER PARA SELECCIONAR LA IMAGEN
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2 ){
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+        }
+        intent.type = "*/*"
+        startActivityForResult(intent,fileResult)
+    }
+
+    //trae el elemento seleccionado del file manager
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == fileResult) {
+            if (resultCode == RESULT_OK && data != null) {
+
+                val clipData = data.clipData
+
+                if (clipData != null){
+                    for (i in 0 until clipData.itemCount) {
+                        val uri = clipData.getItemAt(i).uri
+                        uri?.let { fileUpload(it) }
+                    }
+                }else {
+                    val uri = data.data
+                    uri?.let { fileUpload(it) }
+                }
+
+            }
+        }
+    }
+
+    private fun fileUpload(mUri: Uri) {
+        val folder: StorageReference = FirebaseStorage.getInstance().reference.child("Chats")
+        val path =mUri.lastPathSegment.toString()
+        val fileName: StorageReference = folder.child(path.substring(path.lastIndexOf('/')+1))
+
+        fileName.putFile(mUri).addOnSuccessListener {
+            fileName.downloadUrl.addOnSuccessListener { uri ->
+                urlImagen =java.lang.String.valueOf(uri)
+
+                _Mensaje.setText(urlImagen)
+
+                // Turn Boolean true
+                Toast.makeText(baseContext, "File added succesfully", Toast.LENGTH_LONG).show()
+
+            }
+        }.addOnFailureListener {
+            Toast.makeText(baseContext, "Something went wrong", Toast.LENGTH_LONG).show()
+        }
     }
 
     // Location
