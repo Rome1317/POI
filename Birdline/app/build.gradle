@@ -77,4 +77,9 @@ dependencies {
     // Location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //Firebase storage
+    implementation 'com.google.firebase:firebase-storage:19.2.2'
 }

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdline.R
 import com.example.birdline.models.Users
+import com.squareup.picasso.Picasso
 
 class ContactsAdapter(val context: Context, var LISTA:List<Users>): RecyclerView.Adapter<ContactsAdapter.Holder>() {
 
@@ -27,6 +28,8 @@ class ContactsAdapter(val context: Context, var LISTA:List<Users>): RecyclerView
             var email: TextView = view?.findViewById(R.id.username)
             var status: TextView = view?.findViewById(R.id.showMore)
             var img: ImageView = view?.findViewById(R.id.photo)
+
+            Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/birdline-test.appspot.com/o/user.png?alt=media&token=e765494b-814a-402b-96c5-520aefeab686").into(img)
 
             if (superHero != null) {
                 email.text = superHero.emails

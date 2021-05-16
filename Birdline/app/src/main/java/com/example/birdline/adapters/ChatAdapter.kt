@@ -23,11 +23,13 @@ class ChatAdapter(val context: Context, var LISTA:List<Chat>): RecyclerView.Adap
         fun Draw (superHero: Chat) {
             var txt: TextView = view?.findViewById(R.id.username)
             var men: TextView = view?.findViewById(R.id.showMore)
+
             men.text = superHero.users[0]+", "+superHero.users[1]
             email =superHero.users[1]
             id = superHero.id
             name = superHero.name
             txt.text= superHero.name
+
         }
         init {
             view.setOnClickListener(this)
