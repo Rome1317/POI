@@ -27,9 +27,18 @@ class GroupActivity : AppCompatActivity() {
     lateinit var sub_groups: List<SubGrupos>
     private var adapter: SubGroupAdapter? = null
 
+    //Encryption
+    private var ENCRYPT = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.group)
+
+        // Set Encryption
+        val toggle:Switch = findViewById(R.id.switch2)
+        toggle.setOnCheckedChangeListener { _, isChecked ->
+            ENCRYPT = isChecked
+        }
 
         auth = FirebaseAuth.getInstance()
 
@@ -40,6 +49,7 @@ class GroupActivity : AppCompatActivity() {
         groupname.text = chatname
 
         _post = findViewById(R.id.postTextField)
+
         if (uid != null) {
             _id = uid
         }
@@ -61,7 +71,19 @@ class GroupActivity : AppCompatActivity() {
         val btnF_addTask: FloatingActionButton = findViewById(R.id.btnF_add_task)
 
         btn_send.setOnClickListener() {
-            sendPost()
+
+            if(_post.text.toString() != ""){
+
+                if (!ENCRYPT) {
+                    sendPost()
+                } else {
+                    sendEncryptedPost()
+                }
+            }
+            else{
+                Toast.makeText(this,"Write something", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         btnF_addSubGroup.setOnClickListener() { //Boton de agregar sub grupo
@@ -199,6 +221,21 @@ class GroupActivity : AppCompatActivity() {
         txt_post_main.setText("")
     }
 
+    private fun sendEncryptedPost() {
+        val publicacion = _post.text.toString()
+        val txt_post_main: EditText = findViewById(R.id.postTextField)
+
+        var encryted = Encriptacion.cifrar(publicacion,EncryptionKeys.POSTS.toString())
+
+        val post = Post(
+                publicacion = encryted,
+                from = auth.currentUser.email,
+                encrypted = true
+        )
+
+        firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id).collection(ReferenciasFirebase.POST.toString()).document().set(post)
+        txt_post_main.setText("")
+    }
 
     private fun showPosts() {
         val postRef = firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(_id) //Estoy en duda si es POST xd

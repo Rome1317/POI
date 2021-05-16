@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.birdline.models.ReferenciasFirebase
+import com.squareup.picasso.Picasso
 import java.util.*
 
 class ChatActivity : AppCompatActivity() {
@@ -80,6 +81,11 @@ class ChatActivity : AppCompatActivity() {
         var ema = intent.getStringExtra("EMAIL")
         var uid = intent.getStringExtra("ID")
         var chatname = intent.getStringExtra("CHAT_NAME")
+        var photo = intent.getStringExtra("PHOTO")
+
+        // Photo
+        var chatphoto: ImageView = findViewById(R.id.imageView8)
+        Picasso.get().load(photo).into(chatphoto)
 
         var username: TextView = findViewById(R.id.textView9)
         username.text = chatname
@@ -109,7 +115,7 @@ class ChatActivity : AppCompatActivity() {
                 if (!ENCRYPT) {
                     sendMessage()
                 } else {
-                    sendEncryptMessage()
+                    sendEncryptedMessage()
                 }
 
             }else{
@@ -159,7 +165,7 @@ class ChatActivity : AppCompatActivity() {
         txt_mensaje_main.setText("")
     }
 
-    private fun sendEncryptMessage() {
+    private fun sendEncryptedMessage() {
         val mensaje = _Mensaje.text.toString()
         val txt_mensaje_main:EditText = findViewById(R.id.messageTextField)
 

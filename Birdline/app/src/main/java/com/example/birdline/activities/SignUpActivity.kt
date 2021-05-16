@@ -169,7 +169,6 @@ class SignUpActivity : AppCompatActivity() {
         fileName.putFile(mUri).addOnSuccessListener {
             fileName.downloadUrl.addOnSuccessListener { uri ->
                 urlImagen =java.lang.String.valueOf(uri)
-                firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(auth.currentUser.email).update("image",urlImagen)
 
                 // Turn Boolean true
                 photoAdded = true

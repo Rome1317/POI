@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdline.R
+import com.example.birdline.models.Encriptacion
+import com.example.birdline.models.EncryptionKeys
 import com.example.birdline.models.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,9 +28,16 @@ class PostAdapter(val context: Context, var LISTA: List<Post>): RecyclerView.Ada
         fun render(posts: Post) {
             auth = FirebaseAuth.getInstance()
 
+            // Formato de fecha y hora
             val localDateTime = posts.dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yy - HH:mm:ss")
             val formatted = localDateTime.format(formatter)
+
+            // Encriptacion
+            if(posts.encrypted != false) {
+                var decrypted = Encriptacion.descifar(posts.publicacion, EncryptionKeys.POSTS.toString())
+                posts.publicacion = decrypted
+            }
 
             val postLayout : ConstraintLayout = view.findViewById(R.id.postLayout)
             val userPost: TextView = view.findViewById(R.id.userPost)

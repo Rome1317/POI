@@ -2,13 +2,13 @@ package com.example.birdline.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdline.R
 import com.example.birdline.adapters.PostAdapter
+import com.example.birdline.models.Encriptacion
+import com.example.birdline.models.EncryptionKeys
 import com.example.birdline.models.Post
 import com.example.birdline.models.ReferenciasFirebase
 import com.google.firebase.auth.FirebaseAuth
@@ -22,9 +22,18 @@ class SubGroupActivity : AppCompatActivity() {
     private lateinit var _post: EditText
     private lateinit var _id: String
 
+    //Encryption
+    private var ENCRYPT = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.subgroup_post)
+
+        // Set Encryption
+        val toggle: Switch = findViewById(R.id.switch5)
+        toggle.setOnCheckedChangeListener { _, isChecked ->
+            ENCRYPT = isChecked
+        }
 
         auth = FirebaseAuth.getInstance()
 
@@ -42,7 +51,18 @@ class SubGroupActivity : AppCompatActivity() {
         val btn_send: Button = findViewById(R.id.sendPostButton)
 
         btn_send.setOnClickListener() {
-            sendPost()
+
+            if(_post.text.toString() != ""){
+
+                if (!ENCRYPT) {
+                    sendPost()
+                } else {
+                    sendEncryptedPost()
+                }
+            }
+            else{
+                Toast.makeText(this,"Write something", Toast.LENGTH_SHORT).show()
+            }
         }
 
         val postRef = firebase.collection(ReferenciasFirebase.SUBGRUPOS.toString()).document(uid.toString())
@@ -84,6 +104,22 @@ class SubGroupActivity : AppCompatActivity() {
 
         firebase.collection(ReferenciasFirebase.SUBGRUPOS.toString()).document(_id).collection(
             ReferenciasFirebase.POST.toString()).document().set(post)
+        txt_post_main.setText("")
+    }
+
+    private fun sendEncryptedPost() {
+        val publicacion = _post.text.toString()
+        val txt_post_main: EditText = findViewById(R.id.postTextField)
+
+        var encryted = Encriptacion.cifrar(publicacion, EncryptionKeys.POSTS.toString())
+
+        val post = Post(
+                publicacion = encryted,
+                from = auth.currentUser.email,
+                encrypted = true
+        )
+
+        firebase.collection(ReferenciasFirebase.SUBGRUPOS.toString()).document(_id).collection(ReferenciasFirebase.POST.toString()).document().set(post)
         txt_post_main.setText("")
     }
 }
