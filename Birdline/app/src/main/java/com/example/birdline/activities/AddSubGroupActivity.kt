@@ -99,15 +99,19 @@ class AddSubGroupActivity : AppCompatActivity() {
         val grupo = SubGrupos(
                 id = groupId.toString(),
                 name = "$title",
-                users = userstoadd
+                users = userstoadd,
+                grupo_id = group_id
         )
 
         firebase.collection(ReferenciasFirebase.GRUPOS.toString()).document(group_id).collection(ReferenciasFirebase.SUBGRUPOS.toString()).document(grupo!!.id).set(grupo!!)
 
+        /*
         for(item in userstoadd){
             firebase.collection(ReferenciasFirebase.USUARIOS.toString()).document(item).collection(
                     ReferenciasFirebase.SUBGRUPOS.toString()).document(groupId.toString()).set(grupo)
         }
+
+         */
 
         /*
         firebase.collection(ReferenciasFirebase.USERS.toString()).document(auth.currentUser.email).collection(

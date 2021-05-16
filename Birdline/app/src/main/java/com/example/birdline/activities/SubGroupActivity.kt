@@ -52,7 +52,8 @@ class SubGroupActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        var uid = intent.getStringExtra("ID")
+        var group_id = intent.getStringExtra("group_id")
+        var uid = intent.getStringExtra("id")
         var SubGroupName = intent.getStringExtra("SubGroup")
 
         var subgroup: TextView = findViewById(R.id.subgroupname)
@@ -79,6 +80,8 @@ class SubGroupActivity : AppCompatActivity() {
                 Toast.makeText(this,"Write something", Toast.LENGTH_SHORT).show()
             }
         }
+
+
 
         val postRef = firebase.collection(ReferenciasFirebase.SUBGRUPOS.toString()).document(uid.toString())
 
