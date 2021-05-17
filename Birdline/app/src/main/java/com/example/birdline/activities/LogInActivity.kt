@@ -85,7 +85,7 @@ class LogInActivity : AppCompatActivity() {
     private fun showHome(email: String){
         val currentUser = auth.currentUser
         val intent: Intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("user", currentUser.email)
+        intent.putExtra("email", currentUser.email)
         startActivity(intent)
         finish()
     }

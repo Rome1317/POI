@@ -100,6 +100,11 @@ class SignUpActivity : AppCompatActivity() {
                                 estado = "Disponible",
                                 image = urlImagen
                         )
+
+                        if(usuario.image == ""){
+                            usuario.image = "https://firebasestorage.googleapis.com/v0/b/birdline-test.appspot.com/o/user.png?alt=media&token=3a58d58a-739e-45ee-9526-921dc24b1f29"
+                        }
+
                         firebase.collection(ReferenciasFirebase.USUARIOS.toString())
                                 .document(etEmail.text.toString()).set(usuario)
                         showHome(it.result?.user?.email ?: "")
