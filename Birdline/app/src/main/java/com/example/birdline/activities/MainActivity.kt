@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity(){
                     .replace(R.id.container, newFrag)
                     .commit()
         }
-
+        //cerrar el drawer
+        val miDrawer = findViewById<DrawerLayout>(R.id.drawer)
+        miDrawer.closeDrawer(GravityCompat.START)
     }
 
     //lateinit var spemails: Spinner
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        changeFrag(frag_a(), "FragmentA")
 
         var id = intent.getStringExtra("email")
 
@@ -88,7 +91,7 @@ class MainActivity : AppCompatActivity(){
             when(it.itemId){
 
                 R.id.optMeet -> { //Abre el fragmento A
-                    //changeFrag(frag_a(), tag = "FragmentA")
+                    changeFrag(frag_a(), tag = "FragmentA")
                 }
                 R.id.optCont -> { //Abre el fragmento B
                     changeFrag(frag_contact_list(), tag = "FragmentB")

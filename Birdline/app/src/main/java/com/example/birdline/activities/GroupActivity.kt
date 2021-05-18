@@ -184,7 +184,10 @@ class GroupActivity : AppCompatActivity() {
 
                                 rv.layoutManager   = LinearLayoutManager(this)
                                 val adapter = PostAdapter(this, listPost)
-                                rv.adapter = adapter }
+                                rv.adapter = adapter
+
+                                rv.smoothScrollToPosition(messages.size())
+                            }
                         }
                     }
         }
@@ -200,7 +203,10 @@ class GroupActivity : AppCompatActivity() {
 
                                 rv.layoutManager   = LinearLayoutManager(this)
                                 val adapter = SubGroupAdapter(this, listChats)
-                                rv.adapter = adapter }
+                                rv.adapter = adapter
+
+                                rv.smoothScrollToPosition(messages.size())
+                            }
                         }
                     }
         }
@@ -216,7 +222,10 @@ class GroupActivity : AppCompatActivity() {
 
                             rv.layoutManager   = LinearLayoutManager(this)
                             val adapter = AssignmentAdapter(this, listChats)
-                            rv.adapter = adapter }
+                            rv.adapter = adapter
+
+                            rv.smoothScrollToPosition(messages.size())
+                        }
                     }
                 }
 

@@ -119,7 +119,10 @@ class SubGroupActivity : AppCompatActivity() {
 
                         rv.layoutManager   = LinearLayoutManager(this)
                         val adapter = PostAdapter(this, listPost)
-                        rv.adapter = adapter }
+                        rv.adapter = adapter
+
+                        rv.smoothScrollToPosition(messages.size())
+                    }
                 }
             }
     }

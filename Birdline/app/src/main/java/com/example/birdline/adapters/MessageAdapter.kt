@@ -39,7 +39,7 @@ class MessageAdapter(val context: Context, var LISTA: List<Mensajes>): RecyclerV
             val formatted = localDateTime.format(formatter)
 
             // Encriptacion
-            if(mensajes.encrypted != false) {
+            if(mensajes.encrypted == true) {
                 var decrypted = Encriptacion.descifar(mensajes.message,EncryptionKeys.MENSAJES.toString())
                 mensajes.message = decrypted
             }

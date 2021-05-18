@@ -155,7 +155,12 @@ class ChatActivity : AppCompatActivity() {
 
                             rv.layoutManager   = LinearLayoutManager(this)
                             val adapter = MessageAdapter(this, listChats)
-                            rv.adapter = adapter }
+                            rv.adapter = adapter
+
+                            //val listaMensajes = mutableListOf<Mensajes>()
+                            rv.smoothScrollToPosition(messages.size())
+                        }
+
                     }
                 }
 
