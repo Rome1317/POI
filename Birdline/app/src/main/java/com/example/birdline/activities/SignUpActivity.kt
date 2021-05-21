@@ -59,18 +59,6 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-
-    private fun FileManager() {
-        //ABRE LA VENTA DEL FILENAMAGER PARA SELECCIONAR LA IMAGEN
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2 ){
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
-        }
-        intent.type = "*/*"
-        startActivityForResult(intent,fileResult)
-    }
-
-
     private fun setup(){
         title = "Autenticación"
 
@@ -132,6 +120,17 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
+    private fun FileManager() {
+        //ABRE LA VENTA DEL FILENAMAGER PARA SELECCIONAR LA IMAGEN
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2 ){
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+        }
+        intent.type = "*/*"
+        startActivityForResult(intent,fileResult)
+    }
+
+
     private fun showFirst(){
         val intent: Intent = Intent(this, FirstActivity::class.java)
         startActivity(intent)
@@ -186,8 +185,6 @@ class SignUpActivity : AppCompatActivity() {
             fileName.downloadUrl.addOnSuccessListener { uri ->
                 urlImagen =java.lang.String.valueOf(uri)
 
-                // Turn Boolean true
-                photoAdded = true
                 Toast.makeText(baseContext, "Photo added succesfully", Toast.LENGTH_LONG).show()
 
             }
